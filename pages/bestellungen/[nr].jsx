@@ -34,7 +34,7 @@ export default function Bestellung() {
           </Table>
         </div>
 
-        <div className="col-3 p2">
+        <div className="col-3 p-2">
           <Card>
             <Card.Header as="h5">Gesamt</Card.Header>
             <Card.Body className="text-center">

@@ -9,13 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^7.8.1",
+    "@reduxjs/toolkit": "^1.9.1",
     "bootstrap": "^5.2.3",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "mongoose": "^6.7.4",
     "next": "13.0.5",
     "react": "18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "18.2.0",
-    "sass": "^1.56.1"
+    "react-redux": "^8.0.5",
+    "redux": "^4.2.0",
+    "sass": "^1.56.1",
+    "uuid": "^9.0.0"
   }
 }

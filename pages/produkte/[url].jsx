@@ -1,13 +1,37 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import jsondb from "../../jsondb/produkte";
 import Image from "next/image";
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
+import mongodb from "../../utils/mongodb";
+import Produkt from "../../models/Produkt";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addProdukte } from "../../redux/warenkorbSlice";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/router";
 
-export default function Produktseite() {
+export default function Produktseite({ produkt }) {
+  const [preis, setPreis] = useState(produkt.preis);
+  const [extras, setExtras] = useState([]);
+  const [menge, setMenge] = useState(1);
+  const dispatch = useDispatch();
   const router = useRouter();
-  const { url } = router.query; //Übergabe des text hinter der Route
-  const produkt = jsondb.produkte.find((a) => a.url === url);
+
+  const addExtra = (e, extra) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setPreis(preis + extra.preis);
+      setExtras([...extras, extra]);
+    } else {
+      setPreis(preis - extra.preis);
+      setExtras(extras.filter((alleExtras) => alleExtras._id !== extra._id)); //filtere das Array und behalte alles auaßer, da wo die ID der übergebenen extra._id entspricht
+    }
+  };
+
+  const zumWarenkorb = () => {
+    const id = uuidv4();
+    dispatch(addProdukte({ ...produkt, extras, preis, menge, id })); //füge dem produkt object noch die zusätlichen Eigenschaften an
+    router.push(`/warenkorb`);
+  };
 
   if (!produkt) {
     //Produkt gefunden ??
@@ -41,29 +65,53 @@ export default function Produktseite() {
           <h1>{produkt.name}</h1>
           <ListGroup variant="flush">
             <ListGroupItem>
-              <h2 className="text-danger">{produkt.preis} €</h2>
+              <h2 className="text-danger">{preis.toFixed(2)} €</h2>
             </ListGroupItem>
             <ListGroupItem>{produkt.beschreibung}</ListGroupItem>
             <ListGroupItem>
-              Extras: doppelt
-              <input className="form-check-input me-2" type="checkbox" />
-              extra Pommes
-              <input className="form-check-input me-2" type="checkbox" />
+              {produkt.extras.length ? "Extras: " : <p></p>}
+              {produkt.extras.map((extra) => (
+                <span key={extra._id}>
+                  {extra.text}
+                  <input
+                    className="form-check-input me-2"
+                    type="checkbox"
+                    id={extra.text}
+                    onChange={(e) => addExtra(e, extra)}
+                  />
+                </span>
+              ))}
             </ListGroupItem>
             <ListGroupItem>
               <input
                 className="form-control w-50"
                 type="number"
-                placeholder="1"
+                value={menge}
                 min="1"
+                max="100"
+                onChange={(e) => setMenge(e.target.value)}
               />
             </ListGroupItem>
             <ListGroupItem>
-              <Button variant="danger">zum Warenkorb</Button>
+              <Button variant="danger" onClick={zumWarenkorb}>
+                zum Warenkorb
+              </Button>
             </ListGroupItem>
           </ListGroup>
         </div>
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const url = context.params.url;
+  await mongodb.dbConnect();
+  const produkt = await Produkt.findOne({ url }).lean(); //gibt mongoose object zurück ohne lean()
+  //mongoose ist schlau genug die Datenbank verbindung ndanach wieder zu sclhießen
+  return {
+    props: {
+      produkt: JSON.parse(JSON.stringify(produkt)),
+    },
+  };
 }

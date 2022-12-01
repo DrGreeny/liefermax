@@ -2,13 +2,15 @@ import { Table, CloseButton, Button, Card } from "react-bootstrap";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { loescheProdukt } from "../redux/warenkorbSlice";
+import { loescheProdukt, leeren } from "../redux/warenkorbSlice";
 import { useEffect, useState } from "react";
 import {
   PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Warenkorb() {
   const dispatch = useDispatch();
@@ -22,7 +24,28 @@ export default function Warenkorb() {
   };
   const amount = warenkorb.gesamtbetrag;
   const currency = "EUR";
-  const style = { layout: "vertical" };
+  const style = { layout: "vertical", height: 30 };
+  const router = useRouter();
+
+  const erstelleBestellung = async (data) => {
+    try {
+      console.log("erstelleBestellung");
+      const res = await axios.post(
+        "http://localhost:3000/api/bestellungen",
+        data
+      );
+      console.log(res);
+      if (res.status === 201) {
+        console.log("leeren");
+        dispatch(leeren());
+        router.push(`/bestellungen/${res.data._id}`);
+      }
+    } catch (error) {
+      console.log("erstelleBestellung error:");
+      console.log(error.response.data);
+    }
+  };
+
   const ButtonWrapper = ({ currency, showSpinner }) => {
     // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
     // This is the main reason to wrap the PayPalButtons in a new component
@@ -64,7 +87,17 @@ export default function Warenkorb() {
           }}
           onApprove={function (data, actions) {
             return actions.order.capture().then(function (details) {
-              console.log(details.purchase_units[0].shipping);
+              const kunde = details.purchase_units[0].shipping;
+              erstelleBestellung({
+                kunde: kunde.name.full_name,
+                adresse:
+                  kunde.address.address_line_1 +
+                  ", " +
+                  kunde.address.admin_area_1,
+                betrag: warenkorb.gesamtbetrag,
+                status: 0,
+                zahlung: 1,
+              });
             });
           }}
         />
@@ -119,7 +152,7 @@ export default function Warenkorb() {
                         ))}
                       </td>
                       <td>{produkt.menge}</td>
-                      <td>{(produkt.preis * produkt.menge).toFixed(2)}</td>
+                      <td>{(produkt.preis * produkt.menge).toFixed(2)}EUR</td>
                       <td>
                         <Button
                           className="btn-sm"
@@ -137,7 +170,7 @@ export default function Warenkorb() {
               <Card>
                 <Card.Header as="h5">Gesamt</Card.Header>
                 <Card.Body className="text-center">
-                  <Card.Title>{warenkorb.gesamtbetrag.toFixed(2)}</Card.Title>
+                  <Card.Title>{warenkorb.gesamtbetrag.toFixed(2)} €</Card.Title>
                   {kasse ? (
                     <PayPalScriptProvider
                       options={{

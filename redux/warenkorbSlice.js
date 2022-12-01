@@ -14,7 +14,9 @@ const warenkorbSlice = createSlice({
       state.gesamtbetrag += action.payload.preis * action.payload.menge;
     },
     leeren: (state) => {
-      state = initialState;
+      state.produkte = [];
+      state.wAnzahl = 0;
+      state.gesamtbetrag = 0;
     },
     loescheProdukt: (state, action) => {
       const leftProdukte = state.produkte.filter(

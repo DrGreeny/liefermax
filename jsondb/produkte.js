@@ -6,7 +6,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 6.99,
       url: "burger",
-      bild: "/bilder/produkte/burger.jpg",
+      bild: "/Bilder/produkte/burger.jpg",
       extras: [
         {
           text: "doppelt",
@@ -24,7 +24,7 @@ const jsondb = {
       kategorie: "Trinken",
       preis: 1.99,
       url: "cola",
-      bild: "/bilder/produkte/cola.jpg",
+      bild: "/Bilder/produkte/cola.jpg",
       extras: [
         {
           text: "gekühlt",
@@ -38,7 +38,7 @@ const jsondb = {
       kategorie: "Nachspeise",
       preis: 2.99,
       url: "erdbeereis",
-      bild: "/bilder/produkte/eis.jpg",
+      bild: "/Bilder/produkte/eis.jpg",
       extras: [
         {
           text: "extra Sahne",
@@ -52,7 +52,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 6.99,
       url: "falaffel",
-      bild: "/bilder/produkte/falaffel.jpg",
+      bild: "/Bilder/produkte/falaffel.jpg",
       extras: [
         {
           text: "Sesam Sauce",
@@ -70,7 +70,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 4.5,
       url: "lahmacun",
-      bild: "/bilder/produkte/lahmacun.jpg",
+      bild: "/Bilder/produkte/lahmacun.jpg",
       extras: [
         {
           text: "scharf",
@@ -84,7 +84,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 8.5,
       url: "lasagne",
-      bild: "/bilder/produkte/lasagne.jpg",
+      bild: "/Bilder/produkte/lasagne.jpg",
       extras: [
         {
           text: "doppelt",
@@ -102,7 +102,7 @@ const jsondb = {
       kategorie: "Nachspeise",
       preis: 3.2,
       url: "muffin",
-      bild: "/bilder/produkte/muffin.jpg",
+      bild: "/Bilder/produkte/muffin.jpg",
     },
     {
       name: "Pizza Original",
@@ -110,7 +110,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 7.5,
       url: "pizza",
-      bild: "/bilder/produkte/pizza.jpg",
+      bild: "/Bilder/produkte/pizza.jpg",
       extras: [
         {
           text: "extra Käse",
@@ -128,7 +128,7 @@ const jsondb = {
       kategorie: "Hauptgericht",
       preis: 4.8,
       url: "pommmes",
-      bild: "/bilder/produkte/pommes.jpg",
+      bild: "/Bilder/produkte/pommes.jpg",
       extras: [
         {
           text: "Ketchup",

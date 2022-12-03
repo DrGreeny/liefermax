@@ -11,6 +11,8 @@ import {
 } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function Warenkorb() {
   const dispatch = useDispatch();
@@ -21,8 +23,12 @@ export default function Warenkorb() {
 
   const entfernen = (produkt) => {
     dispatch(loescheProdukt(produkt));
+    toast.error(produkt.name + " wurde entfernt!", {
+      position: "top-center",
+      autoClose: 3000,
+    });
   };
-  const amount = warenkorb.gesamtbetrag;
+  const amount = warenkorb.gesamtbetrag.toFixed(2);
   const currency = "EUR";
   const style = { layout: "vertical", height: 30 };
   const router = useRouter();
@@ -93,10 +99,15 @@ export default function Warenkorb() {
                 adresse:
                   kunde.address.address_line_1 +
                   ", " +
-                  kunde.address.admin_area_1,
+                  kunde.address.admin_area_2,
                 betrag: warenkorb.gesamtbetrag,
                 status: 0,
                 zahlung: 1,
+                produkte: warenkorb.produkte.map((produkt) => ({
+                  name: produkt.name,
+                  menge: produkt.menge,
+                  extras: produkt.extras.map((extra) => extra.text),
+                })),
               });
             });
           }}
@@ -106,7 +117,12 @@ export default function Warenkorb() {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: -50 }} //hier fängt die animation an, d.h. komplette Seite ist quasi ausgeblendet
+      animate={{ opacity: 1, x: 0 }} // animiert wird bis zu opacity = 1 = voll eingeblendet
+      //transition={{ ease: "easeOut", duration: 3 }} //ausfaden von einer anderen Seite auf diese heißt längeres Faden
+      transition={{ type: "spring", stiffness: 200 }}
+    >
       {warenkorb.wAnzahl === 0 ? (
         <h2>Warenkorb ist leer</h2>
       ) : (
@@ -193,6 +209,6 @@ export default function Warenkorb() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

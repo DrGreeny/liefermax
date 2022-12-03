@@ -24,9 +24,30 @@ const BestellungsSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    produkte: {
+      type: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          menge: {
+            type: Number,
+            required: true,
+          },
+          extras: {
+            type: [
+              {
+                type: String,
+              },
+            ],
+          },
+        },
+      ],
+    },
   }
   // { timestamps: true }
 );
-
+//delete mongoose.connection.model["Bestellung"];
 export default mongoose.models.Bestellung ||
   mongoose.model("Bestellung", BestellungsSchema);

@@ -61,6 +61,28 @@ export default function Bestellung({ bestellung }) {
                 </tr>
               </tbody>
             </Table>
+            <Table hover responsive>
+              <thead>
+                <tr>
+                  <th>Produktname</th>
+                  <th>Extras</th>
+                  <th>Menge</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bestellung.produkte.map((produkt) => (
+                  <tr key={produkt._id}>
+                    <td>{produkt.name}</td>
+                    <td>
+                      {produkt.extras.map((extra) => (
+                        <span key={extra._id}>{extra}</span>
+                      ))}
+                    </td>
+                    <td>{produkt.menge}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
 
           <div className="col-3 p-2">

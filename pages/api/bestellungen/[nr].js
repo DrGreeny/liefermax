@@ -19,15 +19,27 @@ export default async function handler(req, res) {
     }
   }
 
-  /*   if (method === "PUT") {
+  if (method === "PUT") {
     //Änderung der Bestelldaten
     try {
-      console.log("Bestelle...");
-      const bestellung = await Bestellung.create(req.body);
-      console.log(bestellung);
-      res.status(201).json(bestellung);
+      const bestellung = await Bestellung.findByIdAndUpdate(nr, req.body, {
+        new: true,
+      }); // wichtig, dass parameter nr heißt, da doe funciton die nummer hier erwartet
+      res.status(200).json(bestellung);
     } catch (error) {
+      console.log(error.response.data);
       res.status(500).json(error);
     }
-  } */
+  }
+
+  if (method === "DELETE") {
+    //Änderung der Bestelldaten
+    try {
+      const bestellung = await Bestellung.findByIdAndDelete(nr); // wichtig, dass parameter nr heißt, da doe funciton die nummer hier erwartet
+      res.status(200).json(bestellung);
+    } catch (error) {
+      console.log(error.response.data);
+      res.status(500).json(error);
+    }
+  }
 }

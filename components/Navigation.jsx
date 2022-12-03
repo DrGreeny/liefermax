@@ -19,7 +19,11 @@ export default function Navigation() {
             width={30}
             height={30}
           />
-          <Badge pill bg="success">
+          <Badge
+            pill
+            bg="success"
+            style={{ position: "absolute", right: "25px", top: "25px" }}
+          >
             {wAnzahl}
           </Badge>
         </Link>
